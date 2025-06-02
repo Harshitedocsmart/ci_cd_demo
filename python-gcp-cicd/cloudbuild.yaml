@@ -1,0 +1,20 @@
+steps:
+  # Step 1: Run unit tests
+  - name: 'python'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        pip install -r requirements.txt
+        python -m pytest test_main.py
+
+  # Step 2: Deploy to Cloud Run directly from source
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      [
+        'run', 'deploy', 'python-cicd-no-docker',
+        '--source=.',
+        '--region=us-central1',
+        '--platform=managed',
+        '--allow-unauthenticated'
+      ]
